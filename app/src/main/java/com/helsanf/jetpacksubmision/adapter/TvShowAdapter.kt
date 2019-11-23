@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.helsanf.jetpacksubmision.R
 import com.helsanf.jetpacksubmision.model.Movie
 import com.helsanf.jetpacksubmision.model.TvShow
+import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
 import com.squareup.picasso.Picasso
 
 class TvShowAdapter(private val context: Context,
-                    private val items: List<TvShow>,
-                    private val listener: (TvShow) -> Unit
+                    private val items: List<ResultTvShow>,
+                    private val listener: (ResultTvShow) -> Unit
 ) : RecyclerView.Adapter<TvShowAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewgroup: ViewGroup, p1: Int): ViewHolder {
@@ -41,11 +42,11 @@ class TvShowAdapter(private val context: Context,
         val imgPoster : ImageView = itemsView.findViewById(R.id.img_poster)
         val tvDescription : TextView = itemsView.findViewById(R.id.tv_item_description)
         val tvDate: TextView = itemsView.findViewById(R.id.tv_item_date)
-        fun bindItem(items: TvShow, listener: (TvShow) -> Unit) {
-            items.poster_path?.let { Picasso.get().load(it).into(imgPoster) }
-            tvTitle.text = items.title
+        fun bindItem(items: ResultTvShow, listener: (ResultTvShow) -> Unit) {
+            items.poster_path.let { Picasso.get().load("https://image.tmdb.org/t/p/w185/$it").into(imgPoster) }
+            tvTitle.text = items.original_name
             tvDescription.text = items.overview
-            tvDate.text = items.release_date
+            tvDate.text = items.first_air_date
             itemView.setOnClickListener { listener(items) }
         }
     }

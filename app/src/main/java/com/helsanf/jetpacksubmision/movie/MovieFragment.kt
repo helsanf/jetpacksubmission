@@ -7,14 +7,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.helsanf.jetpacksubmision.R
+import com.helsanf.jetpacksubmision.ViewModelFactory
 import com.helsanf.jetpacksubmision.adapter.MovieAdapter
 import com.helsanf.jetpacksubmision.detail.DetailActivity
-import com.helsanf.jetpacksubmision.model.Movie
+import com.helsanf.jetpacksubmision.di.Injection
+import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import kotlinx.android.synthetic.main.fragment_movie.*
 
 /**
@@ -23,8 +26,7 @@ import kotlinx.android.synthetic.main.fragment_movie.*
 class MovieFragment : Fragment() {
 
     private var adapter: MovieAdapter? = null
-    private var item: MutableList<Movie> = mutableListOf()
-    private var viewModel : MovieViewModel? = null
+    private var viewModel: MovieViewModel? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,21 +37,28 @@ class MovieFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel =ViewModelProviders.of(this).get(MovieViewModel::class.java)
-        item.clear()
-        item.addAll(viewModel!!.getMovie())
-        adapter =
-            MovieAdapter(this.activity!!, item, { item: Movie -> getItemClick(item) })
-        rv_movie.adapter = adapter
-        rv_movie.setHasFixedSize(true)
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
-        rv_movie.layoutManager = layoutManager
-        adapter!!.notifyDataSetChanged()
+        progressMovie.visibility = View.VISIBLE
+        viewModel = obtainViewModel()
+        viewModel!!.getAllMovie().observe(this, Observer{
+            progressMovie.visibility = View.GONE
+            adapter =
+                MovieAdapter(this.activity!!, it, { item: ResultMovie -> getItemClick(item) })
+            rv_movie.adapter = adapter
+            rv_movie.setHasFixedSize(true)
+            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
+            rv_movie.layoutManager = layoutManager
+            adapter!!.notifyDataSetChanged()
+        })
+
     }
 
-    fun getItemClick(item: Movie) {
+    private fun obtainViewModel(): MovieViewModel {
+        return ViewModelProviders.of(this, Injection().getMovieRepo(requireContext())).get(MovieViewModel::class.java)
+    }
+
+    fun getItemClick(item: ResultMovie) {
         val intent = Intent(activity, DetailActivity::class.java)
-        intent.putExtra("movie_id", item.movieId)
+        intent.putExtra("movie_id", item.id)
         startActivity(intent)
     }
 }

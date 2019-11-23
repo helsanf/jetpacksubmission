@@ -2,6 +2,9 @@ package com.helsanf.jetpacksubmision.data.source.remote.rest
 
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.MovieResponses
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
+import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
+import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.TvShowResponses
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,12 +17,26 @@ interface ApiInterface {
         @Query("api_key") apiKey : String,
         @Query("language") bahasa : String,
         @Query("page") page : Int
-    ) : Call<MovieResponses>
+    ) : Observable<MovieResponses>
     @GET("movie/{movie_id}")
     fun getDetailMovie(
         @Path("movie_id") movieId : String,
         @Query("api_key") apiKey : String,
         @Query("language") bahasa : String
-    ) : Call<ResultMovie>
+    ) : Observable<ResultMovie>
+
+    @GET("tv/popular")
+    fun getAllTvShowPopuler(
+        @Query("api_key") apiKey: String,
+        @Query("language") bahasa : String,
+        @Query("page") page : Int
+    ) : Observable<TvShowResponses>
+
+    @GET("tv/{tv_id}")
+    fun getDetailTvShow(
+        @Path("tv_id") tv_id : Int,
+        @Query("api_key") apiKey : String,
+        @Query("language") bahasa : String
+    ) : Observable<ResultTvShow>
 
 }

@@ -1,34 +1,25 @@
 package com.helsanf.jetpacksubmision.detail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.helsanf.jetpacksubmision.data.datasource.movie.RepositoryMovie
 import com.helsanf.jetpacksubmision.model.Movie
 import com.helsanf.jetpacksubmision.model.TvShow
+import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
+import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
 import com.helsanf.jetpacksubmision.utils.DataDummy
 
-class DetailViewModel : ViewModel() {
+class DetailViewModel internal constructor(private val repository: RepositoryMovie) : ViewModel() {
     private var idMovie: String? = null
-    private var movie: Movie? = null
-    private var idTv : String? = null
-    private var tvShow: TvShow? = null
+    private var idTv : Int? = null
 
-    fun getMovie(): Movie? {
-        for (i in 0 until DataDummy().generateMovie().size) {
-            val movieDetail = DataDummy().generateMovie().get(i)
-            if (movieDetail.movieId.equals(getMovieId())) {
-                movie = movieDetail
-            }
-        }
-        return movie
+    fun getDetailMovie() : LiveData<ResultMovie>{
+        return repository.getDetailMovie(getMovieId())
     }
-    fun getTvShow(): TvShow? {
-        for (i in 0 until DataDummy().generateDummyTvShow().size) {
-            val tvShowDetail = DataDummy().generateDummyTvShow().get(i)
-            if (tvShowDetail.idTvShow.equals(getTvId())) {
-                tvShow = tvShowDetail
-            }
-        }
-        return tvShow
+    fun getDetailTvShow() : LiveData<ResultTvShow>{
+        return repository.getDetailTvShow(getTvId())
     }
+
 
     fun setMovieId(movieId : String){
         this.idMovie = movieId
@@ -37,10 +28,10 @@ class DetailViewModel : ViewModel() {
         return idMovie!!
     }
 
-    fun setTvId(idTv : String){
+    fun setTvId(idTv : Int){
         this.idTv = idTv
     }
-    fun getTvId() : String{
+    fun getTvId() : Int{
         return idTv!!
     }
 

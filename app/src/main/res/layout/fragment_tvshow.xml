@@ -7,6 +7,16 @@
     tools:context=".tvshow.TvshowFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <ProgressBar
+        android:id="@+id/progressTV"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:foregroundGravity="center"
+        android:layout_marginTop="100dp">
+
+    </ProgressBar>
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/rv_tvshow"
       android:layout_width="match_parent"

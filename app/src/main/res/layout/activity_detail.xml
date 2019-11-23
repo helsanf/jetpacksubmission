@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".detail.DetailActivity">
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressDetail"
+        android:layout_gravity="center"
+        android:layout_margin="100dp"
+        android:visibility="gone"
+        >
+
+    </ProgressBar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +26,7 @@
             android:id="@+id/imgDetail"
             android:layout_width="200dp"
             android:layout_height="250dp"
-            app:srcCompat="@color/colorAccent" />
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:text="@string/title" />
+                tools:text="@string/title" />
 
             <TextView
                 android:id="@+id/tv_release_date"
@@ -37,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:text="Tanggal Rilis" />
+                tools:text="Tanggal Rilis" />
 
             <TextView
                 android:id="@+id/tv_rating"
@@ -45,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:text="Rating" />
+                tools:text="Rating" />
         </LinearLayout>
 
     </LinearLayout>
@@ -56,6 +66,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="10dp"
-        android:text="Descripsi" />
+        tools:text="Descripsi" />
 
 </LinearLayout>

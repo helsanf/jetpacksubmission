@@ -9,11 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.helsanf.jetpacksubmision.R
 import com.helsanf.jetpacksubmision.model.Movie
+import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.squareup.picasso.Picasso
 
 class MovieAdapter(private val context: Context,
-                   private val items: List<Movie>,
-                   private val listener: (Movie) -> Unit
+                   private val items: List<ResultMovie>,
+                   private val listener: (ResultMovie) -> Unit
 ) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewgroup: ViewGroup, p1: Int): ViewHolder {
@@ -40,8 +41,8 @@ class MovieAdapter(private val context: Context,
         val imgPoster : ImageView = itemsView.findViewById(R.id.img_poster)
         val tvDescription : TextView = itemsView.findViewById(R.id.tv_item_description)
         val tvDate: TextView = itemsView.findViewById(R.id.tv_item_date)
-        fun bindItem(items: Movie, listener: (Movie) -> Unit) {
-            items.poster_path?.let { Picasso.get().load(it).into(imgPoster) }
+        fun bindItem(items: ResultMovie, listener: (ResultMovie) -> Unit) {
+            items.poster_path?.let { Picasso.get().load("https://image.tmdb.org/t/p/w185/$it").into(imgPoster) }
             tvTitle.text = items.title
             tvDescription.text = items.overview
             tvDate.text = items.release_date
