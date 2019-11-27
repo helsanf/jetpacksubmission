@@ -3,24 +3,18 @@ package com.helsanf.jetpacksubmision.utils
 import androidx.test.espresso.IdlingResource
 import androidx.test.espresso.idling.CountingIdlingResource
 
-class IdlingResource {
-    companion object {
-        private const val RESOURCE = "GLOBAL"
+object IdlingResource {
+    private const val RESOURCE = "GLOBAL"
+    private val espressoTestIdlingResource = CountingIdlingResource(RESOURCE)
 
-    }
+    internal val espressoIdlingResource: IdlingResource
+        get() = espressoTestIdlingResource
 
-    private val espressoTestIdlingResource: CountingIdlingResource =
-        CountingIdlingResource(RESOURCE)
-
-    fun increment() {
+    internal fun increment() {
         espressoTestIdlingResource.increment()
     }
 
-    fun decrement() {
+    internal fun decrement() {
         espressoTestIdlingResource.decrement()
-    }
-
-    fun getEspressoIdlingResource(): IdlingResource {
-        return espressoTestIdlingResource
     }
 }

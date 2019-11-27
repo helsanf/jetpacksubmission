@@ -3,6 +3,7 @@ package com.helsanf.jetpacksubmision.utils
 import com.helsanf.jetpacksubmision.model.Movie
 import com.helsanf.jetpacksubmision.model.TvShow
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
+import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
 
 class FakeDataDummyTest {
 
@@ -120,12 +121,12 @@ class FakeDataDummyTest {
         return movie
     }
 
-    fun generateDummyTvShow(): ArrayList<TvShow> {
-        val tvShow = ArrayList<TvShow>()
+    fun generateDummyTvShow(): ArrayList<ResultTvShow> {
+        val tvShow = ArrayList<ResultTvShow>()
 
         tvShow.add(
-            TvShow(
-                "1",
+            ResultTvShow(
+                1,
                 "Band of Brothers",
                 "8.2",
                 "Drawn from interviews with survivors of Easy Company, as well as their journals and letters, Band of Brothers chronicles the experiences of these men from paratrooper training in Georgia through the end of the war. As an elite rifle company parachuting into Normandy early on D-Day morning, participants in the Battle of the Bulge, and witness to the horrors of war, the men of Easy knew extraordinary bravery and extraordinary fear - and became the stuff of legend. Based on Stephen E. Ambrose's acclaimed book of the same name.",
@@ -135,8 +136,8 @@ class FakeDataDummyTest {
         )
 
         tvShow.add(
-            TvShow(
-                "2",
+            ResultTvShow(
+                2,
                 "I Am Not an Animal",
                 "9.5",
                 "I Am Not An Animal is an animated comedy series about the only six talking animals in the world, whose cosseted existence in a vivisection unit is turned upside down when they are liberated by animal rights activists.",
@@ -146,8 +147,8 @@ class FakeDataDummyTest {
         )
 
         tvShow.add(
-            TvShow(
-                "3",
+            ResultTvShow(
+                3,
                 "Chernobyl",
                 "8.7",
                 "The true story of one of the worst man-made catastrophes in history: the catastrophic nuclear accident at Chernobyl. A tale of the brave men and women who sacrificed to save Europe from unimaginable disaster.",
@@ -157,8 +158,8 @@ class FakeDataDummyTest {
         )
 
         tvShow.add(
-            TvShow(
-                "4",
+            ResultTvShow(
+                4,
                 "Rick and Morty",
                 "8.6",
                 "Rick is a mentally-unbalanced but scientifically-gifted old man who has recently reconnected with his family. He spends most of his time involving his young grandson Morty in dangerous, outlandish adventures throughout space and alternate universes. Compounded with Morty's already unstable family life, these events cause Morty much distress at home and school.",
@@ -168,8 +169,8 @@ class FakeDataDummyTest {
         )
 
         tvShow.add(
-            TvShow(
-                "5",
+            ResultTvShow(
+                5,
                 "Breaking Bad",
                 "8.4",
                 "When Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime.",
@@ -179,8 +180,8 @@ class FakeDataDummyTest {
         )
 
         tvShow.add(
-            TvShow(
-                "6",
+            ResultTvShow(
+                6,
                 "Sherlock",
                 "8.3",
                 "A modern update finds the famous sleuth and his doctor partner solving crime in 21st century London.",
@@ -190,8 +191,8 @@ class FakeDataDummyTest {
         )
 
         tvShow.add(
-            TvShow(
-                "7",
+            ResultTvShow(
+                7,
                 "Planet Earth II",
                 "8.3",
                 "David Attenborough presents a documentary series exploring how animals meet the challenges of surviving in the most iconic habitats on earth.",
@@ -201,8 +202,8 @@ class FakeDataDummyTest {
         )
 
         tvShow.add(
-            TvShow(
-                "8",
+            ResultTvShow(
+                8,
                 "Avatar: The Last Airbender",
                 "8.3",
                 "In a war-torn world of elemental magic, a young boy reawakens to undertake a dangerous mystic quest to fulfill his destiny as the Avatar, and bring peace to the world.",
@@ -212,8 +213,8 @@ class FakeDataDummyTest {
         )
 
         tvShow.add(
-            TvShow(
-                "9",
+            ResultTvShow(
+                9,
                 "Stranger Things",
                 "8.3",
                 "When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.",
@@ -223,8 +224,8 @@ class FakeDataDummyTest {
         )
 
         tvShow.add(
-            TvShow(
-                "10",
+            ResultTvShow(
+                10,
                 "DEATH NOTE",
                 "8.3",
                 "Light Yagami is an ace student with great prospects—and he’s bored out of his mind. But all that changes when he finds the Death Note, a notebook dropped by a rogue Shinigami death god. Any human whose name is written in the notebook dies, and Light has vowed to use the power of the Death Note to rid the world of evil. But will Light succeed in his noble goal, or will the Death Note turn him into the very thing he fights against?",
@@ -232,13 +233,11 @@ class FakeDataDummyTest {
                 "https://image.tmdb.org/t/p/w500/g8hHbsRmHYoWYizhWCk87vpkrmy.jpg"
             )
         )
-
-
         return tvShow
 
     }
 
-    fun getDetailMovie(moveId : String) : ResultMovie?{
+    fun getDetailMovie(moveId : Int) : ResultMovie?{
         for (i in 0 until generateMovie().size) {
             val movie = generateMovie().get(i)
             if (movie.id.equals(moveId)) {
@@ -248,10 +247,10 @@ class FakeDataDummyTest {
         return null
     }
 
-    fun getDetailTvShow(tvShow : String) : TvShow?{
-        for (i in 0 until generateMovie().size) {
+    fun getDetailTvShow(tvShow : Int?) : ResultTvShow?{
+        for (i in 0 until generateDummyTvShow().size) {
             val tv = generateDummyTvShow().get(i)
-            if (tv.idTvShow.equals(tvShow)) {
+            if (tv.id.equals(tvShow)) {
                 return tv
             }
         }

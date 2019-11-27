@@ -9,11 +9,9 @@ import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.TvShowRespon
 import com.helsanf.jetpacksubmision.utils.DataDummy
 
 class TvShowViewModel internal constructor(private val repository: RepositoryMovie): ViewModel() {
-    fun getTvShow(): List<TvShow> {
-        return DataDummy().generateDummyTvShow()
-    }
 
-    fun getAllTvShow() : LiveData<List<ResultTvShow>>{
-        return  repository.getAllTvShow()
-    }
+    val tvShow = repository.getAllTvShow()
+//    fun getAllTvShow() : LiveData<List<ResultTvShow>>{
+//        return  repository.getAllTvShow()
+//    }
 }

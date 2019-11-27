@@ -8,11 +8,10 @@ import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.helsanf.jetpacksubmision.utils.DataDummy
 
 class MovieViewModel internal constructor(private val repository: RepositoryMovie): ViewModel() {
-    fun getMovie(): List<Movie> {
-        return DataDummy().generateMovie()
-    }
 
-    fun getAllMovie() : LiveData<List<ResultMovie>>{
-        return repository.getMovieList()
-    }
+    val movieList = repository.getMovieList()
+
+//    fun getAllMovie() : LiveData<List<ResultMovie>>{
+//        return repository.getMovieList()
+//    }
 }

@@ -1,16 +1,14 @@
 package com.helsanf.jetpacksubmision.data.datasource.movie
 
-import androidx.annotation.NonNull
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.helsanf.jetpacksubmision.data.rest.remote.RemoteRepository
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
-import org.junit.Test
 
-import org.junit.Assert.*
 
-class FakeRepositoryMovie constructor(@NonNull val remoteRepository: RemoteRepository) :
+class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository) :
     MovieDataSource {
     @Volatile
     private var INSTANCE: RepositoryMovie? = null
@@ -45,7 +43,7 @@ class FakeRepositoryMovie constructor(@NonNull val remoteRepository: RemoteRepos
 
     }
 
-    override fun getDetailMovie(id_movie: String): LiveData<ResultMovie> {
+    override fun getDetailMovie(id_movie: String?): LiveData<ResultMovie> {
         val movieDetail: MutableLiveData<ResultMovie> = MutableLiveData()
         remoteRepository.getDetailMovie(id_movie, object : RemoteRepository.MovieDetailCallBack {
             override fun detailLoaded(movie: ResultMovie) {
@@ -75,9 +73,9 @@ class FakeRepositoryMovie constructor(@NonNull val remoteRepository: RemoteRepos
         return listTvShow
     }
 
-    override fun getDetailTvShow(id_tv: Int): LiveData<ResultTvShow> {
+    override fun getDetailTvShow(id_tv: Int?): LiveData<ResultTvShow> {
         val tvDetail: MutableLiveData<ResultTvShow> = MutableLiveData()
-        remoteRepository.getDetailTvShow(id_tv, object : RemoteRepository.TvShowDetailCallBack {
+        remoteRepository.getDetailTvShow(id_tv.toString(), object : RemoteRepository.TvShowDetailCallBack {
             override fun detailLoaded(tvShow: ResultTvShow) {
                 tvDetail.postValue(tvShow)
             }

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,15 +32,19 @@ class MovieFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+            val view : View = inflater.inflate(R.layout.fragment_movie, container, false)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movie, container, false)
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        val progressMovie : ProgressBar = view.findViewById(R.id.progressMovie)
         progressMovie.visibility = View.VISIBLE
         viewModel = obtainViewModel()
-        viewModel!!.getAllMovie().observe(this, Observer{
+        return view
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel!!.movieList.observe(this, Observer{
             progressMovie.visibility = View.GONE
             adapter =
                 MovieAdapter(this.activity!!, it, { item: ResultMovie -> getItemClick(item) })
@@ -49,11 +54,11 @@ class MovieFragment : Fragment() {
             rv_movie.layoutManager = layoutManager
             adapter!!.notifyDataSetChanged()
         })
-
     }
 
     private fun obtainViewModel(): MovieViewModel {
-        return ViewModelProviders.of(this, Injection().getMovieRepo(requireContext())).get(MovieViewModel::class.java)
+        return ViewModelProviders.of(this, Injection().getMovieRepo(requireContext()))
+            .get(MovieViewModel::class.java)
     }
 
     fun getItemClick(item: ResultMovie) {

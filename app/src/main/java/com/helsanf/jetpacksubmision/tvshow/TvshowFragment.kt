@@ -41,7 +41,7 @@ class TvshowFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         progressTV.visibility = View.VISIBLE
         viewModel = obtainViewModel()
-        viewModel!!.getAllTvShow().observe(this,Observer{
+        viewModel!!.tvShow.observe(this,Observer{
             progressTV.visibility = View.GONE
             adapter =
                 TvShowAdapter(this.activity!!, it, { item: ResultTvShow -> getItemClick(item) })

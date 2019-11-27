@@ -6,7 +6,7 @@ import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
 
 interface MovieDataSource {
     fun getMovieList() : LiveData<List<ResultMovie>>
-    fun getDetailMovie(id_movie : String) : LiveData<ResultMovie>
+    fun getDetailMovie(id_movie : String?) : LiveData<ResultMovie>
     fun getAllTvShow() : LiveData<List<ResultTvShow>>
-    fun getDetailTvShow(id_tv : Int) : LiveData<ResultTvShow>
+    fun getDetailTvShow(id_tv : Int?) : LiveData<ResultTvShow>
 }

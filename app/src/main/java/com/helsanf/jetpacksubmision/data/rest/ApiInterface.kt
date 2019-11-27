@@ -34,7 +34,7 @@ interface ApiInterface {
 
     @GET("tv/{tv_id}")
     fun getDetailTvShow(
-        @Path("tv_id") tv_id : Int,
+        @Path("tv_id") tv_id : String,
         @Query("api_key") apiKey : String,
         @Query("language") bahasa : String
     ) : Observable<ResultTvShow>

@@ -17,17 +17,19 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
- class RemoteRepository(@NonNull val apiInterface: ApiInterface) {
+ class RemoteRepository internal constructor(@NonNull val apiInterface: ApiInterface) {
+//     private var idling = IdlingResource()
 
-     fun getAllMovie(movieCallBack: MovieCallBack) {
-         IdlingResource().increment()
+     fun getAllMovie(movieCallBack: MovieCallBack?) {
+       IdlingResource.increment()
         val connect = apiInterface.getMovieList(BuildConfig.API_KEY, "en-US", 1)
          connect.subscribeOn(Schedulers.io())
              .observeOn(AndroidSchedulers.mainThread())
              .subscribe(object : Observer<MovieResponses>{
                  override fun onNext(t: MovieResponses?) {
                      if (t != null) {
-                         movieCallBack.movieLoadedSuccses(t.results)
+                         movieCallBack?.movieLoadedSuccses(t.results)
+                         IdlingResource.decrement()
                      }
                  }
 
@@ -40,14 +42,14 @@ import java.util.*
                  }
 
                  override fun onError(e: Throwable?) {
-                     movieCallBack.movieNotAvaliable(e?.message.toString())
-                     IdlingResource().decrement()
+                     movieCallBack?.movieNotAvaliable(e?.message.toString())
                  }
 
              })
     }
 
-    fun getAllTvShow(tvShowCallback: TvShowCallBack){
+    fun getAllTvShow(tvShowCallback: TvShowCallBack?){
+       IdlingResource.increment()
         val connect = apiInterface.getAllTvShowPopuler(BuildConfig.API_KEY,"en-US", 1)
         connect.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -62,19 +64,21 @@ import java.util.*
 
                 override fun onNext(t: TvShowResponses?) {
                     if(t != null){
-                        tvShowCallback.tvShowLoadedSucces(t.results)
+                        tvShowCallback?.tvShowLoadedSucces(t.results)
+                       IdlingResource.decrement()
 
                     }
                 }
 
                 override fun onError(e: Throwable?) {
-                    tvShowCallback.tvShowNotLoaded(e?.message.toString())
+                    tvShowCallback?.tvShowNotLoaded(e?.message.toString())
                 }
 
             })
     }
-    fun getDetailMovie(id_movie : String,movieDetailCallBack: MovieDetailCallBack){
-        val connect = apiInterface.getDetailMovie(id_movie,BuildConfig.API_KEY,"en-US")
+    fun getDetailMovie(id_movie : String?,movieDetailCallBack: MovieDetailCallBack?){
+        IdlingResource.increment()
+        val connect = apiInterface.getDetailMovie(id_movie!!,BuildConfig.API_KEY,"en-US")
         connect.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<ResultMovie>{
@@ -88,18 +92,20 @@ import java.util.*
 
                 override fun onNext(t: ResultMovie?) {
                     if (t != null) {
-                        movieDetailCallBack.detailLoaded(t)
+                        movieDetailCallBack?.detailLoaded(t)
+                        IdlingResource.decrement()
                     }
                 }
 
                 override fun onError(e: Throwable?) {
-                   movieDetailCallBack.detailErorLoaded(e?.message.toString())
+                   movieDetailCallBack?.detailErorLoaded(e?.message.toString())
                 }
 
             })
     }
-    fun getDetailTvShow(id_tv : Int,tvShowDetailCallBack: TvShowDetailCallBack){
-        val connect  = apiInterface.getDetailTvShow(id_tv,BuildConfig.API_KEY,"en-US")
+    fun getDetailTvShow(id_tv : String?,tvShowDetailCallBack: TvShowDetailCallBack?){
+        IdlingResource.increment()
+        val connect  = apiInterface.getDetailTvShow(id_tv!!,BuildConfig.API_KEY,"en-US")
          connect.subscribeOn(Schedulers.io())
              .observeOn(AndroidSchedulers.mainThread())
              .subscribe(object : Observer<ResultTvShow>{
@@ -113,12 +119,13 @@ import java.util.*
 
                  override fun onNext(t: ResultTvShow?) {
                      if (t != null) {
-                         tvShowDetailCallBack.detailLoaded(t)
+                         tvShowDetailCallBack?.detailLoaded(t)
+                         IdlingResource.decrement()
                      }
                  }
 
                  override fun onError(e: Throwable?) {
-                    tvShowDetailCallBack.detailErorLoaded(e?.message.toString())
+                    tvShowDetailCallBack?.detailErorLoaded(e?.message.toString())
                  }
 
              })
