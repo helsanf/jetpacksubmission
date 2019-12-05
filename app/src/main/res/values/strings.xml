@@ -5,4 +5,8 @@
     <string name="title">title</string>
     <string name="dateline">deadline</string>
     <string name="description">descripsi</string>
+    <string name="favorite">favorite</string>
+    <string name="movie">Movie</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>

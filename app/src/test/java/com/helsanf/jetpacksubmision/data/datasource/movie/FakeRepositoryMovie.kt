@@ -3,12 +3,14 @@ package com.helsanf.jetpacksubmision.data.datasource.movie
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
+import com.helsanf.jetpacksubmision.data.local.LocalRepository
 import com.helsanf.jetpacksubmision.data.rest.remote.RemoteRepository
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
 
 
-class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository) :
+class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository, private val localRepository: LocalRepository) :
     MovieDataSource {
     @Volatile
     private var INSTANCE: RepositoryMovie? = null
@@ -18,7 +20,7 @@ class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository) :
             synchronized(RepositoryMovie::class.java) {
                 if (INSTANCE == null) {
                     INSTANCE = RepositoryMovie(
-                        remoteRepository
+                        remoteRepository,localRepository
                     )
                 }
             }
@@ -86,6 +88,38 @@ class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository) :
 
         })
         return tvDetail
+    }
+
+    override fun getMovieFromFavorites(): DataSource.Factory<Int, ResultMovie>? {
+        return localRepository.getMovieFavorites()
+    }
+
+    override fun getTvShowFromFavorites(): DataSource.Factory<Int, ResultTvShow>? {
+        return localRepository.getTvShowFavorites()
+    }
+
+    override fun addToFavoriteMovie(movie: ResultMovie) {
+        return localRepository.insertMovieToFavorites(movie)
+    }
+
+    override fun addToFavoriteTvShow(tvShow: ResultTvShow) {
+        return localRepository.insertTvShowToFavorites(tvShow)
+    }
+
+    override fun unFavoritesMovie(movie: ResultMovie) {
+        return localRepository.deleteMovie(movie)
+    }
+
+    override fun unFavoritesTvShow(tvShow: ResultTvShow) {
+        return localRepository.deleteTvShow(tvShow)
+    }
+
+    override fun getDetailMovieFromFavorites(id_movie: String?): LiveData<ResultMovie>? {
+        return localRepository.getDetailMovieFavorites(id_movie)
+    }
+
+    override fun getDetailTvShowFromFavorites(id_tv: Int?): LiveData<ResultTvShow>? {
+        return localRepository.getDetailTvShowFavorites(id_tv)
     }
 
 

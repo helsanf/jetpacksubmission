@@ -1,6 +1,7 @@
 package com.helsanf.jetpacksubmision.data.datasource.movie
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.helsanf.jetpacksubmision.data.local.LocalRepository
 import com.helsanf.jetpacksubmision.data.rest.remote.RemoteRepository
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
@@ -24,7 +25,8 @@ class RepositoryCatalogueMovieTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private var remoteRepository = mock(RemoteRepository::class.java)
-    private val fakeRepo: FakeRepositoryMovie = FakeRepositoryMovie(remoteRepository)
+    private var localRepository = mock(LocalRepository::class.java)
+    private val fakeRepo: FakeRepositoryMovie = FakeRepositoryMovie(remoteRepository,localRepository)
     private val movieList: List<ResultMovie>? = FakeDataDummyTest().generateMovie()
     private val tvList: List<ResultTvShow>? = FakeDataDummyTest().generateDummyTvShow()
     private val movieID = movieList?.get(0)?.id

@@ -1,6 +1,7 @@
 package com.helsanf.jetpacksubmision.data.rest.remote
 
 import androidx.annotation.NonNull
+import androidx.paging.PageKeyedDataSource
 import com.helsanf.jetpacksubmision.BuildConfig
 import com.helsanf.jetpacksubmision.data.source.remote.rest.ApiInterface
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.MovieResponses
@@ -17,10 +18,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
- class RemoteRepository internal constructor(@NonNull val apiInterface: ApiInterface) {
+ class RemoteRepository internal constructor(@NonNull val apiInterface: ApiInterface)  {
 //     private var idling = IdlingResource()
 
-     fun getAllMovie(movieCallBack: MovieCallBack?) {
+     fun getAllMovie(movieCallBack: MovieCallBack?)  {
        IdlingResource.increment()
         val connect = apiInterface.getMovieList(BuildConfig.API_KEY, "en-US", 1)
          connect.subscribeOn(Schedulers.io())

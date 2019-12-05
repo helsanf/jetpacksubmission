@@ -11,27 +11,50 @@ import com.helsanf.jetpacksubmision.utils.DataDummy
 
 class DetailViewModel internal constructor(private val repository: RepositoryMovie) : ViewModel() {
     private var idMovie: String? = null
-    private var idTv : Int? = null
+    private var idTv: Int? = null
 
-    fun getDetailMovie() : LiveData<ResultMovie>{
+    fun getDetailMovie(): LiveData<ResultMovie> {
         return repository.getDetailMovie(getMovieId())
     }
-    fun getDetailTvShow() : LiveData<ResultTvShow>{
+
+    fun getDetailTvShow(): LiveData<ResultTvShow> {
         return repository.getDetailTvShow(getTvId())
     }
 
+    fun addToFavoritesMovie(movie: ResultMovie) {
+        return repository.addToFavoriteMovie(movie)
+    }
+    fun addtoFavoritesTvShow(tvShow : ResultTvShow){
+        return repository.addToFavoriteTvShow(tvShow)
+    }
+    fun getDetailMovieFromFavorites() : LiveData<ResultMovie>? {
+        return repository.getDetailMovieFromFavorites(getMovieId())
+    }
 
-    fun setMovieId(movieId : String){
+    fun getDetailTvShowFromFavorites() : LiveData<ResultTvShow>?{
+        return repository.getDetailTvShowFromFavorites(getTvId())
+    }
+    fun unFavoritesMovie(movie: ResultMovie){
+        return repository.unFavoritesMovie(movie)
+    }
+    fun unFavoritesTvShow(tvShow: ResultTvShow){
+        return repository.unFavoritesTvShow(tvShow)
+    }
+
+
+    fun setMovieId(movieId: String) {
         this.idMovie = movieId
     }
-    fun getMovieId() : String{
+
+    fun getMovieId(): String {
         return idMovie!!
     }
 
-    fun setTvId(idTv : Int){
+    fun setTvId(idTv: Int) {
         this.idTv = idTv
     }
-    fun getTvId() : Int{
+
+    fun getTvId(): Int {
         return idTv!!
     }
 

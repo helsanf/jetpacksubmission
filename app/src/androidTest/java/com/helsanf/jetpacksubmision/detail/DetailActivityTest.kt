@@ -45,6 +45,5 @@ class DetailActivityTest{
         Espresso.onView(ViewMatchers.withId(R.id.tvTitle)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.tv_rating)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         assertNotNull(dummyMovie)
-
     }
 }

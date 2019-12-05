@@ -1,8 +1,11 @@
 package com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow
 
-data class ResultTvShow(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-    val id : Int,
+@Entity(tableName = "table_tvshow")
+data class ResultTvShow(
+    @PrimaryKey val id : Int,
     val original_name : String,
     val vote_average : String,
     val overview : String,

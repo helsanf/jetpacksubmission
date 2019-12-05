@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -50,7 +51,8 @@ dependencies {
     implementation "androidx.legacy:legacy-support-v4:$androidXLegacySupport"
 
     // Dependencies for Architecture Component
-    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    kapt 'android.arch.persistence.room:compiler:1.1.1'
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
@@ -78,7 +80,6 @@ dependencies {
 
 
 //    testImplementation 'org.mockito:mockito-inline:2.27.0'
-
 
 
     // Dependencies for Android unit tests
@@ -111,4 +112,8 @@ dependencies {
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+    //view database lib
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 }

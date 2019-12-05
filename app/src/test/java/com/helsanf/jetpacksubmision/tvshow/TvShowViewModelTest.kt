@@ -33,7 +33,7 @@ class TvShowViewModelTest{
         tvMutableLiveData.value = tvList
         Mockito.`when`(movieRepository.getAllTvShow()).thenReturn(tvMutableLiveData)
         val observer: Observer<*>? = Mockito.mock(Observer::class.java)
-        viewModel.getAllTvShow().observeForever(observer as Observer<in List<ResultTvShow>>)
+        viewModel.tvShow.observeForever(observer as Observer<in List<ResultTvShow>>)
         Mockito.verify(observer).onChanged(tvList)
         assertNotNull(tvList)
         assertEquals(10,tvList?.size)

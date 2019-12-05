@@ -36,7 +36,7 @@ class MovieViewModelTest {
         movieMutableLiveData.value = movieList
         Mockito.`when`(movieRepository.getMovieList()).thenReturn(movieMutableLiveData)
         val observer: Observer<*>? = Mockito.mock(Observer::class.java)
-        viewModel.getAllMovie().observeForever(observer as Observer<in List<ResultMovie>>)
+        viewModel.movieList.observeForever(observer as Observer<in List<ResultMovie>>)
         Mockito.verify(observer).onChanged(movieList)
         assertNotNull(movieList)
         assertEquals(10,movieList?.size)

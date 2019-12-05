@@ -22,7 +22,7 @@ class ViewModelFactory constructor(private var movieRepositoryMovie: RepositoryM
             return DetailViewModel(movieRepositoryMovie) as T
         }
 
-        throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
+        throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name) as Throwable
     }
 
 
