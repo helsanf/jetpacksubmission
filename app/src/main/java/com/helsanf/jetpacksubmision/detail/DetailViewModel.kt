@@ -8,18 +8,26 @@ import com.helsanf.jetpacksubmision.model.TvShow
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
 import com.helsanf.jetpacksubmision.utils.DataDummy
+import com.helsanf.jetpacksubmision.utils.lazyDeferred
 
 class DetailViewModel internal constructor(private val repository: RepositoryMovie) : ViewModel() {
     private var idMovie: String? = null
     private var idTv: Int? = null
-
-    fun getDetailMovie(): LiveData<ResultMovie> {
-        return repository.getDetailMovie(getMovieId())
+    val getDetailMovie by lazyDeferred {
+        repository.getDetailMovie(getMovieId())
     }
 
-    fun getDetailTvShow(): LiveData<ResultTvShow> {
-        return repository.getDetailTvShow(getTvId())
+    val getDetailTvShow by lazyDeferred {
+        repository.getDetailTvShow(getTvId())
     }
+
+//    fun getDetailMovie(): LiveData<ResultMovie> {
+//        return repository.getDetailMovie(getMovieId())
+//    }
+
+//    fun getDetailTvShow(): LiveData<ResultTvShow> {
+//        return repository.getDetailTvShow(getTvId())
+//    }
 
     fun addToFavoritesMovie(movie: ResultMovie) {
         return repository.addToFavoriteMovie(movie)

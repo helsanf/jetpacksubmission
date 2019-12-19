@@ -3,6 +3,7 @@ package com.helsanf.jetpacksubmision.movie
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,10 @@ import com.helsanf.jetpacksubmision.detail.DetailActivity
 import com.helsanf.jetpacksubmision.di.Injection
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import kotlinx.android.synthetic.main.fragment_movie.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
@@ -28,6 +33,8 @@ class MovieFragment : Fragment() {
 
     private var adapter: MovieAdapter? = null
     private var viewModel: MovieViewModel? = null
+    private val uiScope = CoroutineScope(Dispatchers.Main + Job())
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,19 +45,30 @@ class MovieFragment : Fragment() {
         val progressMovie : ProgressBar = view.findViewById(R.id.progressMovie)
         progressMovie.visibility = View.VISIBLE
         viewModel = obtainViewModel()
+        initUi()
         return view
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel!!.movieList.observe(this, Observer{
+
+//        viewModel!!.movieList.observe(this, Observer{
+//
+//        })
+    }
+
+    private fun initUi() = uiScope.launch(Dispatchers.Main) {
+        Log.e("TEST","HELSAN_2")
+        val movieGet = viewModel!!.movieList.await()
+        movieGet.observe(this@MovieFragment, Observer {
+            Log.e("TEST","HELSAN")
             progressMovie.visibility = View.GONE
             adapter =
-                MovieAdapter(this.activity!!, it, { item: ResultMovie -> getItemClick(item) })
+                MovieAdapter(requireContext(), it, { item: ResultMovie -> getItemClick(item) })
             rv_movie.adapter = adapter
             rv_movie.setHasFixedSize(true)
-            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
+            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
             rv_movie.layoutManager = layoutManager
             adapter!!.notifyDataSetChanged()
         })

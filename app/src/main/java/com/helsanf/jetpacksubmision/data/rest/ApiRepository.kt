@@ -1,6 +1,7 @@
 package com.helsanf.jetpacksubmision.data.source.remote.rest
 
 import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -21,7 +22,7 @@ class ApiRepository {
 
         retrofit = Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org/3/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(httpClient.build())
             .build()

@@ -15,6 +15,9 @@ import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
     private var viewModel : DetailViewModel? = null
@@ -44,18 +47,11 @@ class DetailActivity : AppCompatActivity() {
         if(movieId != 0 && fromFavorites==false){
             progressDetail.visibility = View.VISIBLE
             viewModel?.setMovieId(movieId.toString())
-            viewModel?.getDetailMovie()?.observe(this, Observer {
-                progressDetail.visibility = View.GONE
-                getDetailMovie(it)
-                Log.e("fromFavorites",fromFavorites.toString())
-            })
+            initDetailMovie()
         }else if(tvShowId != 0 && fromFavorites==false){
             progressDetail.visibility = View.VISIBLE
             viewModel?.setTvId(tvShowId!!)
-            viewModel?.getDetailTvShow()?.observe(this, Observer {
-                progressDetail.visibility = View.GONE
-                getDetailTvShow(it)
-            })
+            initDetailTvShow()
         } else if(movieId != 0 && fromFavorites==true){
             progressDetail.visibility = View.VISIBLE
             viewModel?.setMovieId(movieId.toString())
@@ -83,6 +79,20 @@ class DetailActivity : AppCompatActivity() {
     }
     private fun obtainViewModel(): DetailViewModel {
         return ViewModelProviders.of(this, Injection().getMovieRepo(this)).get(DetailViewModel::class.java)
+    }
+    private fun initDetailMovie() = GlobalScope.launch(Dispatchers.Main){
+        val detailMovieGet = viewModel!!.getDetailMovie.await()
+        detailMovieGet.observe(this@DetailActivity, Observer {
+            progressDetail.visibility = View.GONE
+            getDetailMovie(it)
+        })
+    }
+    private fun initDetailTvShow() = GlobalScope.launch(Dispatchers.Main){
+        val detailTvShowGet = viewModel!!.getDetailTvShow.await()
+        detailTvShowGet.observe(this@DetailActivity, Observer {
+            progressDetail.visibility = View.GONE
+            getDetailTvShow(it)
+        })
     }
 
     fun getDetailMovie(movie : ResultMovie){

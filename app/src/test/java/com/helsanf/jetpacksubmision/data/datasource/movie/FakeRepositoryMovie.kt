@@ -28,7 +28,7 @@ class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository, pr
         return INSTANCE!!
     }
 
-    override fun getMovieList(): LiveData<List<ResultMovie>> {
+    override suspend fun getMovieList(): LiveData<List<ResultMovie>> {
         val listMovie: MutableLiveData<List<ResultMovie>> = MutableLiveData()
         remoteRepository.getAllMovie(object :
             RemoteRepository.MovieCallBack {
@@ -45,7 +45,7 @@ class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository, pr
 
     }
 
-    override fun getDetailMovie(id_movie: String?): LiveData<ResultMovie> {
+    override suspend fun getDetailMovie(id_movie: String?): LiveData<ResultMovie> {
         val movieDetail: MutableLiveData<ResultMovie> = MutableLiveData()
         remoteRepository.getDetailMovie(id_movie, object : RemoteRepository.MovieDetailCallBack {
             override fun detailLoaded(movie: ResultMovie) {
@@ -60,7 +60,7 @@ class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository, pr
         return movieDetail
     }
 
-    override fun getAllTvShow(): LiveData<List<ResultTvShow>> {
+    override suspend fun getAllTvShow(): LiveData<List<ResultTvShow>> {
         val listTvShow: MutableLiveData<List<ResultTvShow>> = MutableLiveData()
         remoteRepository.getAllTvShow(object : RemoteRepository.TvShowCallBack {
             override fun tvShowLoadedSucces(tvShow: List<ResultTvShow>) {
@@ -75,7 +75,7 @@ class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository, pr
         return listTvShow
     }
 
-    override fun getDetailTvShow(id_tv: Int?): LiveData<ResultTvShow> {
+    override suspend fun getDetailTvShow(id_tv: Int?): LiveData<ResultTvShow> {
         val tvDetail: MutableLiveData<ResultTvShow> = MutableLiveData()
         remoteRepository.getDetailTvShow(id_tv.toString(), object : RemoteRepository.TvShowDetailCallBack {
             override fun detailLoaded(tvShow: ResultTvShow) {

@@ -20,6 +20,10 @@ import com.helsanf.jetpacksubmision.di.Injection
 import com.helsanf.jetpacksubmision.model.TvShow
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
 import kotlinx.android.synthetic.main.fragment_tvshow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
@@ -41,19 +45,26 @@ class TvshowFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         progressTV.visibility = View.VISIBLE
         viewModel = obtainViewModel()
-        viewModel!!.tvShow.observe(this,Observer{
-            progressTV.visibility = View.GONE
-            adapter =
-                TvShowAdapter(this.activity!!, it, { item: ResultTvShow -> getItemClick(item) })
-            rv_tvshow.adapter = adapter
-            rv_tvshow.setHasFixedSize(true)
-            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
-            rv_tvshow.layoutManager = layoutManager
-            adapter!!.notifyDataSetChanged()
-        })
+        initView()
+//        viewModel!!.tvShow.observe(this,Observer{
+//
+//        })
 //        item.clear()
 //        item.addAll(viewModel!!.getTvShow())
 
+    }
+    private fun initView() = GlobalScope.launch(Dispatchers.Main) {
+        val tvGet = viewModel!!.tvShow.await()
+        tvGet.observe(this@TvshowFragment, Observer {
+            progressTV.visibility = View.GONE
+            adapter =
+                TvShowAdapter(requireContext(), it, { item: ResultTvShow -> getItemClick(item) })
+            rv_tvshow.adapter = adapter
+            rv_tvshow.setHasFixedSize(true)
+            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
+            rv_tvshow.layoutManager = layoutManager
+            adapter!!.notifyDataSetChanged()
+        })
     }
     fun getItemClick(item: ResultTvShow) {
         val intent = Intent(activity, DetailActivity::class.java)
