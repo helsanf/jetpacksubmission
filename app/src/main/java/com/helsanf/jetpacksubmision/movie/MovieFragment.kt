@@ -15,16 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.helsanf.jetpacksubmision.R
-import com.helsanf.jetpacksubmision.ViewModelFactory
 import com.helsanf.jetpacksubmision.adapter.MovieAdapter
 import com.helsanf.jetpacksubmision.detail.DetailActivity
 import com.helsanf.jetpacksubmision.di.Injection
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import kotlinx.android.synthetic.main.fragment_movie.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 /**
  * A simple [Fragment] subclass.
@@ -39,40 +35,61 @@ class MovieFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-            val view : View = inflater.inflate(R.layout.fragment_movie, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_movie, container, false)
         // Inflate the layout for this fragment
 
-        val progressMovie : ProgressBar = view.findViewById(R.id.progressMovie)
+        val progressMovie: ProgressBar = view.findViewById(R.id.progressMovie)
         progressMovie.visibility = View.VISIBLE
         viewModel = obtainViewModel()
-        initUi()
+
         return view
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        insertAlltoLocal()
+//                initUi()
 
-//        viewModel!!.movieList.observe(this, Observer{
-//
-//        })
+
     }
+
+    private fun insertAlltoLocal() = uiScope.launch(Dispatchers.Main) {
+
+        awaitAll(async {
+            viewModel?.movieFromApi?.await()?.observe(this@MovieFragment, Observer {
+                viewModel?.insertAllAsync(it)
+
+                Log.e("RESULT",it.toString())
+            })
+
+        },async {
+            initUi()
+        })
+
+    }
+
 
     private fun initUi() = uiScope.launch(Dispatchers.Main) {
-        Log.e("TEST","HELSAN_2")
-        val movieGet = viewModel!!.movieList.await()
-        movieGet.observe(this@MovieFragment, Observer {
-            Log.e("TEST","HELSAN")
-            progressMovie.visibility = View.GONE
-            adapter =
-                MovieAdapter(requireContext(), it, { item: ResultMovie -> getItemClick(item) })
-            rv_movie.adapter = adapter
-            rv_movie.setHasFixedSize(true)
-            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
-            rv_movie.layoutManager = layoutManager
-            adapter!!.notifyDataSetChanged()
+        //        Log.e("TEST", "HELSAN_2")
+
+        viewModel?.favoritesMovie?.observe(this@MovieFragment, Observer {
+            if(it != null){
+                progressMovie.visibility = View.GONE
+                rv_movie.visibility = View.VISIBLE
+                adapter =
+                    MovieAdapter(requireContext(), it, { item: ResultMovie -> getItemClick(item) })
+                rv_movie.adapter = adapter
+                rv_movie.setHasFixedSize(true)
+                val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
+                rv_movie.layoutManager = layoutManager
+                adapter!!.notifyDataSetChanged()
+            }
+
+
         })
     }
+
 
     private fun obtainViewModel(): MovieViewModel {
         return ViewModelProviders.of(this, Injection().getMovieRepo(requireContext()))

@@ -7,6 +7,7 @@ import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.TvShowRespon
 import io.reactivex.Observable
 import kotlinx.coroutines.Deferred
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -14,11 +15,11 @@ import retrofit2.http.Query
 interface ApiInterface {
 
     @GET("movie/popular")
-     fun getMovieList(
+    suspend fun getMovieList(
         @Query("api_key") apiKey : String,
         @Query("language") bahasa : String,
         @Query("page") page : Int
-    ) : Deferred<MovieResponses>
+    ) : Response<MovieResponses>
     @GET("movie/{movie_id}")
     fun getDetailMovie(
         @Path("movie_id") movieId : String,
@@ -27,11 +28,11 @@ interface ApiInterface {
     ) : Deferred<ResultMovie>
 
     @GET("tv/popular")
-    fun getAllTvShowPopuler(
+    suspend fun getAllTvShowPopuler(
         @Query("api_key") apiKey: String,
         @Query("language") bahasa : String,
         @Query("page") page : Int
-    ) : Deferred<TvShowResponses>
+    ) : Response<TvShowResponses>
 
     @GET("tv/{tv_id}")
     fun getDetailTvShow(

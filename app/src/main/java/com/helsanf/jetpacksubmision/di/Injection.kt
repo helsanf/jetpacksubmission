@@ -15,7 +15,7 @@ class Injection {
     fun repository(context: Context): RepositoryMovie {
         val remoteRepository =
             RemoteRepository(ApiRepository().getUrl().create(ApiInterface::class.java))
-        return RepositoryMovie(remoteRepository,database(context)).getInstance(remoteRepository,database(context))
+        return RepositoryMovie(remoteRepository,database(context),context).getInstance(remoteRepository,database(context))
     }
 
     fun getMovieRepo(context: Context): ViewModelProvider.Factory {

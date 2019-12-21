@@ -1,7 +1,6 @@
 package com.helsanf.jetpacksubmision.data.room
 
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
 import androidx.room.*
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
@@ -10,6 +9,9 @@ import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
 interface FavoritesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovie(movie : ResultMovie)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAllMovie(movie: List<ResultMovie>?)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTvShow(tvShow : ResultTvShow)
@@ -21,10 +23,10 @@ interface FavoritesDao {
     fun deleteTvShow(tvShow : ResultTvShow)
 
     @Query("SELECT * FROM table_movie")
-    fun getAllMovieLocal() : DataSource.Factory<Int,ResultMovie>
+    fun getAllMovieLocal() : LiveData<List<ResultMovie>>
 
     @Query("SELECT * FROM table_tvshow")
-    fun getAllTvShowLocal() : DataSource.Factory<Int,ResultTvShow>
+    fun getAllTvShowLocal() : LiveData<List<ResultTvShow>>
 
     @Query("SELECT * FROM table_movie WHERE id = :id_movie")
     fun getDetailMovie(id_movie: String?) : LiveData<ResultMovie>

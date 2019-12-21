@@ -32,7 +32,7 @@ class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository, pr
         val listMovie: MutableLiveData<List<ResultMovie>> = MutableLiveData()
         remoteRepository.getAllMovie(object :
             RemoteRepository.MovieCallBack {
-            override fun movieLoadedSuccses(movie: List<ResultMovie>) {
+            override fun movieLoadedSuccses(movie: List<ResultMovie>?) {
                 listMovie.postValue(movie)
             }
 
@@ -63,7 +63,7 @@ class FakeRepositoryMovie constructor(var remoteRepository: RemoteRepository, pr
     override suspend fun getAllTvShow(): LiveData<List<ResultTvShow>> {
         val listTvShow: MutableLiveData<List<ResultTvShow>> = MutableLiveData()
         remoteRepository.getAllTvShow(object : RemoteRepository.TvShowCallBack {
-            override fun tvShowLoadedSucces(tvShow: List<ResultTvShow>) {
+            override fun tvShowLoadedSucces(tvShow: List<ResultTvShow>?) {
                 listTvShow.postValue(tvShow)
             }
 

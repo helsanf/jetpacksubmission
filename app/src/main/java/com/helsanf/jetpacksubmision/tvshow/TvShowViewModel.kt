@@ -16,9 +16,9 @@ class TvShowViewModel internal constructor(private val repository: RepositoryMov
     val tvShow by lazyDeferred { repository.getAllTvShow() }
 
     private val tvShowFavorites = repository.getTvShowFromFavorites()
-    private val liveDataTvShow = tvShowFavorites?.let { LivePagedListBuilder(it, 10).build() }
+//    private val liveDataTvShow = tvShowFavorites?.let { LivePagedListBuilder(it, 10).build() }
 
-    val favoritesTvShow: LiveData<PagedList<ResultTvShow>>? get() = liveDataTvShow
+    val favoritesTvShow: LiveData<List<ResultTvShow>>? get() = tvShowFavorites
 
 
 }

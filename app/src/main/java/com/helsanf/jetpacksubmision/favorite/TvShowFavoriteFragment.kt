@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_tv_show_favorite.*
  * A simple [Fragment] subclass.
  */
 class TvShowFavoriteFragment : Fragment() {
-    private var adapter: TvShowPagedListAdapter? = null
+    private var adapter: TvShowAdapter? = null
     private var viewModel: TvShowViewModel? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,14 +45,24 @@ class TvShowFavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel!!.favoritesTvShow?.observe(this, Observer{
             progressTvShowFavorite.visibility = View.GONE
+
             adapter =
-                TvShowPagedListAdapter({ item: ResultTvShow -> getItemClick(item) })
-            adapter?.submitList(it)
+                TvShowAdapter(requireContext(), it, { item: ResultTvShow -> getItemClick(item) })
             rv_tvshow_favorite.adapter = adapter
             rv_tvshow_favorite.setHasFixedSize(true)
-            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
+            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
             rv_tvshow_favorite.layoutManager = layoutManager
             adapter!!.notifyDataSetChanged()
+
+
+//            adapter =
+//                TvShowPagedListAdapter({ item: ResultTvShow -> getItemClick(item) })
+//            adapter?.submitList(it)
+//            rv_tvshow_favorite.adapter = adapter
+//            rv_tvshow_favorite.setHasFixedSize(true)
+//            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
+//            rv_tvshow_favorite.layoutManager = layoutManager
+//            adapter!!.notifyDataSetChanged()
         })
     }
 

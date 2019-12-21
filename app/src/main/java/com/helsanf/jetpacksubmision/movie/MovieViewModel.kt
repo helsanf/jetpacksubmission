@@ -1,13 +1,12 @@
 package com.helsanf.jetpacksubmision.movie
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
+import androidx.lifecycle.viewModelScope
 import com.helsanf.jetpacksubmision.data.datasource.movie.RepositoryMovie
-import com.helsanf.jetpacksubmision.model.Movie
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
-import com.helsanf.jetpacksubmision.utils.DataDummy
 import com.helsanf.jetpacksubmision.utils.lazyDeferred
 import kotlinx.coroutines.*
 
@@ -15,22 +14,34 @@ class MovieViewModel internal constructor(private val repository: RepositoryMovi
 
     private val viewModelJob = Job()
     lateinit var uiScope: CoroutineScope
+    var listMovie: MutableList<ResultMovie> = mutableListOf()
+    //    private var listMutable : MutableLiveData
+    private val listMutable: MutableLiveData<List<ResultMovie>> = MutableLiveData()
 
-//    val movieList = GlobalScope.launch(Dispatchers.Main + viewModelJob){
-//        repository.getMovieList()
+    //    private  var data = MutableLiveData<MovieResponses>().apply {
+//value = MovieResponses(results = )
 //    }
-
-    val movieList by lazyDeferred {
-        repository.getMovieList() }
-    //lazydeferred  berguna untuk mengisi ke movieList ketika data berhasil di ambil
+    val movieFromLocal = viewModelScope.async(Dispatchers.IO) {
+       repository.getMovieFromFavorites()
+    }
 
     private val movieFavoriteList = repository.getMovieFromFavorites()
-    private val liveDataMovie = movieFavoriteList?.let { LivePagedListBuilder(it, 10).build() }
+    val favoritesMovie: LiveData<List<ResultMovie>>? get() = movieFavoriteList
 
-    val favoritesMovie: LiveData<PagedList<ResultMovie>>? get() = liveDataMovie
+
+    val movieFromApi = viewModelScope.async(Dispatchers.IO){
+        repository.getMovieList()
+    }
+
+    fun insertAllAsync(movie : List<ResultMovie>) = GlobalScope.async{
+        repository.insertAllMovie(movie)
+    }
+    //lazydeferred  berguna untuk mengisi ke movieList ketika data berhasil di ambil
+
 
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
     }
+
 }

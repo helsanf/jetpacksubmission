@@ -1,8 +1,6 @@
 package com.helsanf.jetpacksubmision.data.local
 
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
-import androidx.paging.PagedList
 import com.helsanf.jetpacksubmision.data.room.FavoritesDao
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
@@ -10,11 +8,11 @@ import java.util.concurrent.Executor
 
 class LocalRepository(private val favoritesDao: FavoritesDao? ,  private val ioExecutor: Executor) {
 
-    fun getMovieFavorites(): DataSource.Factory<Int, ResultMovie>? {
+    fun getMovieFavorites(): LiveData<List<ResultMovie>>? {
         return favoritesDao?.getAllMovieLocal()
     }
 
-    fun getTvShowFavorites(): DataSource.Factory<Int, ResultTvShow>? {
+    fun getTvShowFavorites(): LiveData<List<ResultTvShow>>? {
         return favoritesDao?.getAllTvShowLocal()
     }
 
@@ -44,6 +42,12 @@ class LocalRepository(private val favoritesDao: FavoritesDao? ,  private val ioE
         ioExecutor.execute {
             favoritesDao?.deleteTvShow(tvShow)
         }
+    }
+    fun insertAllMovie(movie: List<ResultMovie>?){
+        favoritesDao?.insertAllMovie(movie)
+
+//        ioExecutor.execute {
+//        }
     }
 
 }

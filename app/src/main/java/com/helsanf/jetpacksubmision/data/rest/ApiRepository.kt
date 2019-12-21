@@ -19,7 +19,7 @@ class ApiRepository {
         logging.level = HttpLoggingInterceptor.Level.BODY
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor(logging)
-
+//            .addCallAdapterFactory(CoroutineCallAdapterFactory())
         retrofit = Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org/3/")
             .addCallAdapterFactory(CoroutineCallAdapterFactory())

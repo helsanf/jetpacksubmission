@@ -15,6 +15,7 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.helsanf.jetpacksubmision.R
+import com.helsanf.jetpacksubmision.adapter.MovieAdapter
 import com.helsanf.jetpacksubmision.adapter.MoviePagedListAdapter
 import com.helsanf.jetpacksubmision.detail.DetailActivity
 import com.helsanf.jetpacksubmision.di.Injection
@@ -26,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_movie_favorites.*
  * A simple [Fragment] subclass.
  */
 class MovieFavoritesFragment : Fragment() {
-    private var adapter: MoviePagedListAdapter? = null
+    private var adapter: MovieAdapter? = null
     private var viewModel: MovieViewModel? = null
 
     override fun onCreateView(
@@ -45,16 +46,24 @@ class MovieFavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 //        viewModel?.movieFavoriteList?.
-        viewModel!!.favoritesMovie?.observe(this, Observer<PagedList<ResultMovie>>{
+        viewModel!!.favoritesMovie?.observe(this, Observer<List<ResultMovie>>{
+
             progressMovieFavorite.visibility = View.GONE
             adapter =
-                MoviePagedListAdapter({ item: ResultMovie -> getItemClick(item) })
-            adapter?.submitList(it)
+                MovieAdapter(requireContext(), it, { item: ResultMovie -> getItemClick(item) })
             rv_movie_favorite.adapter = adapter
             rv_movie_favorite.setHasFixedSize(true)
-            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
+            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
             rv_movie_favorite.layoutManager = layoutManager
             adapter!!.notifyDataSetChanged()
+
+//            adapter =
+//                MovieAdapter({requireContext(), it ,item: ResultMovie -> getItemClick(item) })
+//            rv_movie_favorite.adapter = adapter
+//            rv_movie_favorite.setHasFixedSize(true)
+//            val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this.activity)
+//            rv_movie_favorite.layoutManager = layoutManager
+//            adapter!!.notifyDataSetChanged()
         })
     }
     private fun obtainViewModel(): MovieViewModel {
