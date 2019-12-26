@@ -43,7 +43,7 @@ class LocalRepository(private val favoritesDao: FavoritesDao? ,  private val ioE
             favoritesDao?.deleteTvShow(tvShow)
         }
     }
-    fun insertAllMovie(movie: List<ResultMovie>?){
+    suspend fun insertAllMovie(movie: List<ResultMovie>?){
         favoritesDao?.insertAllMovie(movie)
 
 //        ioExecutor.execute {

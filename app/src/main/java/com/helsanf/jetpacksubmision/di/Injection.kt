@@ -9,10 +9,12 @@ import com.helsanf.jetpacksubmision.data.rest.remote.RemoteRepository
 import com.helsanf.jetpacksubmision.data.room.FavoritesDatabases
 import com.helsanf.jetpacksubmision.data.source.remote.rest.ApiInterface
 import com.helsanf.jetpacksubmision.data.source.remote.rest.ApiRepository
+import com.helsanf.jetpacksubmision.utils.NetworkConnectionInterceptor
 import java.util.concurrent.Executors
 
 class Injection {
     fun repository(context: Context): RepositoryMovie {
+        val networkConnectionInterceptor = NetworkConnectionInterceptor(context)
         val remoteRepository =
             RemoteRepository(ApiRepository().getUrl().create(ApiInterface::class.java))
         return RepositoryMovie(remoteRepository,database(context),context).getInstance(remoteRepository,database(context))

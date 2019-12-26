@@ -39,7 +39,7 @@ class RepositoryMovie constructor(private val remoteRepository: RemoteRepository
 //    private var idling = IdlingResource()
 
     override suspend fun getMovieList(): LiveData<List<ResultMovie>> {
-//        IdlingResource.increment()
+
         return withContext(Dispatchers.IO) {
             val listMovie: MutableLiveData<List<ResultMovie>> = MutableLiveData()
             remoteRepository.getAllMovie(object :
@@ -61,7 +61,6 @@ class RepositoryMovie constructor(private val remoteRepository: RemoteRepository
     }
 
     override suspend fun getAllTvShow(): LiveData<List<ResultTvShow>> {
-//        IdlingResource.increment()
         return withContext(Dispatchers.IO) {
             val listTvShow: MutableLiveData<List<ResultTvShow>> = MutableLiveData()
             remoteRepository.getAllTvShow(object : RemoteRepository.TvShowCallBack {

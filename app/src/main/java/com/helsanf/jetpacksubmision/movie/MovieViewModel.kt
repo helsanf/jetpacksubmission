@@ -9,6 +9,7 @@ import com.helsanf.jetpacksubmision.data.datasource.movie.RepositoryMovie
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.helsanf.jetpacksubmision.utils.lazyDeferred
 import kotlinx.coroutines.*
+import java.io.IOException
 
 class MovieViewModel internal constructor(private val repository: RepositoryMovie) : ViewModel() {
 
@@ -22,20 +23,23 @@ class MovieViewModel internal constructor(private val repository: RepositoryMovi
 //value = MovieResponses(results = )
 //    }
     val movieFromLocal = viewModelScope.async(Dispatchers.IO) {
-       repository.getMovieFromFavorites()
+        repository.getMovieFromFavorites()
     }
 
     private val movieFavoriteList = repository.getMovieFromFavorites()
     val favoritesMovie: LiveData<List<ResultMovie>>? get() = movieFavoriteList
 
 
-    val movieFromApi = viewModelScope.async(Dispatchers.IO){
+    val movieFromApi = viewModelScope.async(Dispatchers.IO) {
         repository.getMovieList()
     }
 
-    fun insertAllAsync(movie : List<ResultMovie>) = GlobalScope.async{
+
+    fun insertAllAsync(movie: List<ResultMovie>) = viewModelScope.async(Dispatchers.IO) {
         repository.insertAllMovie(movie)
     }
+
+
     //lazydeferred  berguna untuk mengisi ke movieList ketika data berhasil di ambil
 
 

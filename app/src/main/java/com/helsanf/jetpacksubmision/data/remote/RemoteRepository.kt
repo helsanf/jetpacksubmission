@@ -1,42 +1,47 @@
 package com.helsanf.jetpacksubmision.data.rest.remote
 
+import android.util.Log
 import androidx.annotation.NonNull
 import com.helsanf.jetpacksubmision.BuildConfig
 import com.helsanf.jetpacksubmision.data.source.remote.rest.ApiInterface
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.ResultMovie
 import com.helsanf.jetpacksubmision.model.modelrespone.movie.tvshow.ResultTvShow
+import java.io.IOException
 
 class RemoteRepository internal constructor(@NonNull val apiInterface: ApiInterface) {
 //     private var idling = IdlingResource()
 
     suspend fun getAllMovie(movieCallback: MovieCallBack) {
-        val fetchMovie = apiInterface.getMovieList(BuildConfig.API_KEY, "en-US", 1)
-        if (fetchMovie.isSuccessful) {
-            movieCallback.movieLoadedSuccses(fetchMovie.body()?.results?: emptyList())
-        }else{
-            movieCallback.movieNotAvaliable("Some Error")
+
+        try {
+            val fetchMovie = apiInterface.getMovieList(BuildConfig.API_KEY, "en-US", 1)
+            if (fetchMovie.isSuccessful) {
+                movieCallback.movieLoadedSuccses(fetchMovie.body()?.results ?: emptyList())
+            } else {
+                movieCallback.movieNotAvaliable("Some Error")
+            }
+
+        } catch (e: IOException) {
+            Log.e("Error ","Connection")
         }
 
-//        val fetchMovie = apiInterface
-//            .getMovieList(BuildConfig.API_KEY, "en-US", 1).await()
-//        fetchMovie.results.apply {
-//            if (this.isNotEmpty()) {
-//                movieCallback.movieLoadedSuccses(this)
-//
-//            } else {
-//                movieCallback.movieNotAvaliable("Error")
-//            }
-//        }
     }
 
     suspend fun getAllTvShow(tvShowCallback: TvShowCallBack?) {
-        val fetchTvShow = apiInterface
-            .getAllTvShowPopuler(BuildConfig.API_KEY, "en-US", 1)
-        if (fetchTvShow.isSuccessful) {
-            tvShowCallback?.tvShowLoadedSucces(fetchTvShow.body()?.results)
-        }else{
-            tvShowCallback?.tvShowNotLoaded("Some Error")
+        try {
+            val fetchTvShow = apiInterface
+                .getAllTvShowPopuler(BuildConfig.API_KEY, "en-US", 1)
+            if (fetchTvShow.isSuccessful) {
+                tvShowCallback?.tvShowLoadedSucces(fetchTvShow.body()?.results)
+            } else {
+                tvShowCallback?.tvShowNotLoaded("Some Error")
+            }
+        }catch (e : IOException){
+            Log.e("Error ","Connection")
+
         }
+
+
 //        fetchTvShow.results.apply {
 //            if (this.isNotEmpty()) {
 //                tvShowCallback?.tvShowLoadedSucces(this)

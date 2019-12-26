@@ -48,46 +48,46 @@ class MovieFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        insertAlltoLocal()
-//                initUi()
+
+        initUi()
 
 
     }
+
 
     private fun insertAlltoLocal() = uiScope.launch(Dispatchers.Main) {
 
-        awaitAll(async {
-            viewModel?.movieFromApi?.await()?.observe(this@MovieFragment, Observer {
-                viewModel?.insertAllAsync(it)
-
-                Log.e("RESULT",it.toString())
-            })
-
-        },async {
-            initUi()
-        })
-
-    }
-
-
-    private fun initUi() = uiScope.launch(Dispatchers.Main) {
-        //        Log.e("TEST", "HELSAN_2")
-
-        viewModel?.favoritesMovie?.observe(this@MovieFragment, Observer {
-            if(it != null){
+        viewModel?.movieFromLocal?.await()?.observe(this@MovieFragment, Observer {
+            Log.e("Urutan", "1")
+            if (it != null) {
                 progressMovie.visibility = View.GONE
                 rv_movie.visibility = View.VISIBLE
                 adapter =
                     MovieAdapter(requireContext(), it, { item: ResultMovie -> getItemClick(item) })
                 rv_movie.adapter = adapter
                 rv_movie.setHasFixedSize(true)
-                val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
+                val layoutManager: RecyclerView.LayoutManager =
+                    LinearLayoutManager(requireContext())
                 rv_movie.layoutManager = layoutManager
                 adapter!!.notifyDataSetChanged()
             }
-
-
         })
+
+        viewModel?.movieFromApi?.await()?.observe(this@MovieFragment, Observer {
+            viewModel?.insertAllAsync(it)
+        })
+
+
+
+    }
+
+
+    private fun initUi() = GlobalScope.launch(Dispatchers.Main) {
+        withContext(Dispatchers.Main) {
+            insertAlltoLocal()
+        }
+
+
     }
 
 
